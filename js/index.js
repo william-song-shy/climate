@@ -25,7 +25,7 @@ async function loadLocation() {
       lat:getQueryVariable("lat"),
       lon:getQueryVariable("lon")
     };
-    if(loc.lat == undefined || loc.lon ==undefined)loc=getLocation();
+    if(loc.lat == undefined || loc.lon ==undefined)loc=await getLocation();
     console.log(loc.lat);
     console.log(loc.lon);
     $("#lat").val(loc.lat);
