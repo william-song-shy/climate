@@ -11,8 +11,21 @@ function getLocation() {
         }
     });
 }
+function getQueryVariable(variable){
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return undefined;
+}
 async function loadLocation() {
-    const loc = await getLocation();
+    var loc = {
+      lat:getQueryVariable("lat"),
+      lon:getQueryVariable("lon")
+    };
+    if(loc.lat == undefined || loc.lon ==undefined)loc=getLocation();
     console.log(loc.lat);
     console.log(loc.lon);
     $("#lat").val(loc.lat);
