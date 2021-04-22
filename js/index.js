@@ -31,7 +31,7 @@ async function loadLocation() {
     $("#lat").val(loc.lat);
     $("#lon").val(loc.lon);
     $.ajax({
-        url: `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseInt(loc.lat)}&lon=${parseInt(loc.lon)}`,
+        url: `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseFloat(loc.lat)}&lon=${parseFloat(loc.lon)}`,
         success: result => {
             console.log(result);
             $("#result").append(
