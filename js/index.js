@@ -1,28 +1,3 @@
-function getLocation() {
-  return new Promise((resolve, reject) => {
-    try {
-      window.navigator.geolocation.getCurrentPosition((position) =>
-        resolve({
-          lat: position.coords.latitude,
-          lon: position.coords.longitude
-        })
-      );
-    } catch (e) {
-      reject(e);
-    }
-  });
-}
-function getQueryVariable(variable) {
-  var query = window.location.search.substring(1);
-  var vars = query.split("&");
-  for (var i = 0; i < vars.length; i++) {
-    var pair = vars[i].split("=");
-    if (pair[0] == variable) {
-      return pair[1];
-    }
-  }
-  return undefined;
-}
 async function loadLocation() {
   var loc = {
     lat: getQueryVariable("lat"),
@@ -71,6 +46,7 @@ async function loadLocation() {
                </tbody>\
              </table>`
       );
+      $("#result-loading").remove();
       var month_table_data = "";
       for (let x of result.data) {
         month_table_data += `<tr><td data-label=\"month\">${x.month}</td>\
@@ -99,9 +75,13 @@ async function loadLocation() {
                  </table>
                  `
       );
+      $("#month-loading").remove();
       if (getQueryVariable("station_id") != undefined) {
+        $("#station-title").remove();
+        $("#station-loading").remove();
         return;
       }
+      $("#station-loading").remove();
       var station_table_data = "";
       for (let x of result.nearby_stations) {
         station_table_data += `<tr><td data-label=\"country\">${x.country}</td>\
