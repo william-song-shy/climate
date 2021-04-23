@@ -127,7 +127,7 @@ async function loadView() {
         rules: [
           {
             type: "integer[-180..180]",
-            prompt: "Please enter an integer value in [-90..90]"
+            prompt: "Please enter an integer value in [-180..180]"
           }
         ]
       }
