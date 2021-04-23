@@ -33,12 +33,28 @@ async function loadLocation() {
   console.log(loc.lon);
   $("#lat").val(parseInt(loc.lat));
   $("#lon").val(parseInt(loc.lon));
+  let station_id = getQueryVariable("station_id");
+  console.log(
+    station_id == undefined
+      ? `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseInt(
+          loc.lat
+        )}&lon=${parseInt(loc.lon)}`
+      : `https://climateapi.williamsongshy.repl.co/station/climate?id=${station_id}`
+  );
   $.ajax({
-    url: `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseInt(
-      loc.lat
-    )}&lon=${parseInt(loc.lon)}`,
+    url:
+      station_id == undefined
+        ? `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseInt(
+            loc.lat
+          )}&lon=${parseInt(loc.lon)}`
+        : `https://climateapi.williamsongshy.repl.co/station/climate?id=${station_id}`,
     success: (result) => {
       console.log(result);
+      if (getQueryVariable("station_id") != undefined) {
+        $("#result").append(
+          `<h4>station ${result.name} (id:${result.id})</h4>`
+        );
+      }
       $("#result").append(
         `<table class=\"ui celled table\">\
                <thead>\
@@ -83,10 +99,13 @@ async function loadLocation() {
                  </table>
                  `
       );
+      if (getQueryVariable("station_id") != undefined) {
+        return;
+      }
       var station_table_data = "";
       for (let x of result.nearby_stations) {
         station_table_data += `<tr><td data-label=\"country\">${x.country}</td>\
-                <td data-label=\"id\"><a href=\"station.html?id=${x.id}\">${x.id}</a></td>\
+                <td data-label=\"id\"><a href=\"index.html?station_id=${x.id}\">${x.id}</a></td>\
                 <td data-label=\"lat\">${x.lat}</td>\
                 <td data-label=\"lon\">${x.lon}</td>\
                 <td data-label=\"name\">${x.name}</td>\
