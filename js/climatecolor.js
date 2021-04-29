@@ -34,7 +34,7 @@ function temperature_color( val )
     let item, background, text_color;
     
     if (val == null )
-        return [ "FFFFFF", "000000" ];
+        return get_style([ "FFFFFF", "000000" ]);
    
     if (val < 4.5) 
     {    
@@ -75,7 +75,7 @@ function temperature_color( val )
     else
         text_color = "000000";
    
-    return [ background, text_color ];
+    return get_style([ background, text_color ]);
 }
 
 function precipitation_color( val )
@@ -83,7 +83,7 @@ function precipitation_color( val )
     let item, background, text_color;
     
     if (val == null )
-        return [ "FFFFFF", "000000" ];
+        return get_style([ "FFFFFF", "000000" ]);
    
     item = hex( range_pos( val, 165.6, 0 )*255 );
     background = item + item;
@@ -96,5 +96,10 @@ function precipitation_color( val )
     else        
         text_color = "000000";
 
-    return [ background, text_color ];
+    return get_style([ background, text_color ]);
+}
+
+function get_style (data)
+{
+    return `background:#${data[0]};color:#${data[1]}`
 }

@@ -50,11 +50,11 @@ async function loadLocation() {
       var month_table_data = "";
       for (let x of result.data) {
         month_table_data += `<tr><td data-label=\"month\">${x.month}</td>\
-                 <td data-label=\"prcp\">${x.prcp}</td>\
+                 <td data-label=\"prcp\" style=\"${precipitation_color(x.prcp)}\">${x.prcp}</td>\
                  <td data-label=\"pres\">${x.pres}</td>\
-                 <td data-label=\"tavg\">${x.tavg}</td>\
-                 <td data-label=\"tmax\">${x.tmax}</td>\
-                 <td data-label=\"tmin\">${x.tmin}</td>\
+                 <td data-label=\"tavg\" style=\"${temperature_color(x.tavg)}\">${x.tavg}</td>\
+                 <td data-label=\"tmax\" style=\"${temperature_color(x.tmax)}\">${x.tmax}</td>\
+                 <td data-label=\"tmin\" style=\"${temperature_color(x.tmin)}\">${x.tmin}</td>\
                  <td data-label=\"tsun\">${x.tsun}</td></tr>\
                  `;
       }
