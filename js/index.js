@@ -44,7 +44,7 @@ async function loadLocation() {
                <tbody>\
                  <tr>\
                    <td data-label=\"climate type\">${result.chinesetype}</td>\
-                   <td data-label=\"country\">${result.country}</td>\
+                   <td data-label=\"country\"><img src="https://flagcdn.com/${result.country.toLowerCase()}.svg" width="16">${result.country}</td>\
                    <td data-label=\"koppen type\">${result.koppentype}</td>\
                  </tr>\
                </tbody>\
@@ -81,7 +81,7 @@ async function loadLocation() {
              var station_table_data="";
              for(let x of result.nearby_stations){
                 station_table_data+=
-                `<tr><td data-label=\"country\">${x.country}</td>\
+                `<tr><img src="https://flagcdn.com/${x.country.toLowerCase()}.svg" width="16"><td data-label=\"country\">${x.country}</td>\
                 <td data-label=\"id\"><a href=\"station.html?id=${x.id}\">${x.id}</a></td>\
                 <td data-label=\"lat\">${x.lat}</td>\
                 <td data-label=\"lon\">${x.lon}</td>\
@@ -114,8 +114,8 @@ async function loadView() {
               identifier  : 'lat',
               rules: [
                 {
-                  type   : 'integer[-180..180]',
-                  prompt : 'Please enter an integer value in [-180..180]'
+                  type   : 'number[-90..90]',
+                  prompt : '纬度须在-90和90之间'
                 }
               ]
             },
@@ -123,8 +123,8 @@ async function loadView() {
                 identifier  : 'lon',
                 rules: [
                   {
-                    type   : 'integer[-90..90]',
-                    prompt : 'Please enter an integer value in [-90..90]'
+                    type   : 'number[-180..180]',
+                    prompt : '经度必须在-180和180之间'
                   }
                 ]
             }
