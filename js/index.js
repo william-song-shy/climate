@@ -6,22 +6,22 @@ async function loadLocation() {
   if (loc.lat == undefined || loc.lon == undefined) loc = await getLocation();
   console.log(loc.lat);
   console.log(loc.lon);
-  $("#lat").val(parseInt(loc.lat));
-  $("#lon").val(parseInt(loc.lon));
+  $("#lat").val(parseFloat(loc.lat));
+  $("#lon").val(parseFloat(loc.lon));
   let station_id = getQueryVariable("station_id");
   console.log(
     station_id == undefined
-      ? `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseInt(
+      ? `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseFloat(
           loc.lat
-        )}&lon=${parseInt(loc.lon)}`
+        )}&lon=${parseFloat(loc.lon)}`
       : `https://climateapi.williamsongshy.repl.co/station/climate?id=${station_id}`
   );
   $.ajax({
     url:
       station_id == undefined
-        ? `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseInt(
+        ? `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseFloat(
             loc.lat
-          )}&lon=${parseInt(loc.lon)}`
+          )}&lon=${parseFloat(loc.lon)}`
         : `https://climateapi.williamsongshy.repl.co/station/climate?id=${station_id}`,
     success: (result) => {
       console.log(result);
