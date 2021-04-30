@@ -1,9 +1,17 @@
+var loc = {
+  lat: undefined,
+  lon: undefined
+};
 async function loadLocation() {
-  var loc = {
-    lat: getQueryVariable("lat"),
-    lon: getQueryVariable("lon")
-  };
-  if (loc.lat == undefined || loc.lon == undefined) loc = await getLocation();
+  if (!loc.lat || !loc.lon)
+  {
+    return;
+  }
+  //var loc = {
+  //  lat: getQueryVariable("lat"),
+  //  lon: getQueryVariable("lon")
+  //};
+  //if (loc.lat == undefined || loc.lon == undefined) loc = await getLocation();
   console.log("lat:", loc.lat);
   console.log("lon:", loc.lon);
   $("#lat").val(parseFloat(loc.lat));
@@ -147,6 +155,13 @@ async function loadView() {
     console.log("new url:", `./search.html?name=${$("#name").val()}`);
     window.location.href = `./search.html?name=${$("#name").val()}`;
   });
+}
+function onsubmitloc()
+{
+  loc.lat=$("#lat").val()
+  loc.lon=$("#lon").val()
+  loadLocation();
+  return false;
 }
 $(document).ready(() => {
   loadLocation();
