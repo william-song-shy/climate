@@ -32,6 +32,19 @@ async function loadSearchResult() {
     }
   });
 }
+async function loadView() {
+  $("#search").click(() => {
+    console.log("new url:", `/search.html?name=${$("#name").val()}`);
+    window.location.href = `/search.html?name=${$("#name").val()}`;
+  });
+}
 $(document).ready(() => {
+  console.log(
+    "search url:",
+    `https://climateapi.williamsongshy.repl.co/station/find?name=${getQueryVariable(
+      "name"
+    )}`
+  );
   loadSearchResult();
+  loadView();
 });
