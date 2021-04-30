@@ -106,6 +106,8 @@ async function loadLocation() {
       $("#station-loading").remove();
       var station_table_data = "";
       for (let x of result.nearby_stations) {
+        let marker = L.marker([x.lat, x.lon]).addTo(mymap);
+        marker.bindPopup(`${x.id} ${x.name}`).openPopup();
         station_table_data += `<tr><td data-label=\"country\">${x.country}</td>\
                 <td data-label=\"id\"><a href=\"./?station_id=${x.id}\">${x.id}</a></td>\
                 <td data-label=\"lat\">${x.lat}</td>\
