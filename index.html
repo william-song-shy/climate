@@ -10,6 +10,12 @@
   <script src="js/util.js"></script>
   <script src="js/climatecolor.js"></script>
   <script src="js/index.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
 </head>
 
 <body>
@@ -28,28 +34,35 @@
     </div>
   </div>
   <div class="ui container">
-    <h3>search</h3>
-    <form class="ui form" onsubmit="return onsubmitloc()">
-      <div class="field">
-        <label>latitude</label>
-        <input id="lat" name="lat" type="text" />
+    <div class="ui grid">
+      <div class="six wide column">
+        <h3>search</h3>
+        <form class="ui form" onsubmit="return onsubmitloc()">
+          <div class="field">
+            <label>latitude</label>
+            <input id="lat" name="lat" type="text" />
+          </div>
+          <div class="field">
+            <label>longitude</label>
+            <input id="lon" name="lon" type="text" />
+          </div>
+          <div class="ui submit button">Submit</div>
+          <div class="ui error message"></div>
+        </form>
       </div>
-      <div class="field">
-        <label>longitude</label>
-        <input id="lon" name="lon" type="text" />
+      <div class="two wide column"></div>
+      <div class="eight wide column">
+        <h3>map</h3>
+        <div id="map" style="height: 420px;width: 560px;"></div>
       </div>
-      <div class="ui submit button">Submit</div>
-      <div class="ui error message"></div>
-    </form>
-    <br />
-    <br />
+    </div>
     <h3>result</h3>
-    <div id="result"></div>
-    <div id="result-loading" class="ui segment">
-      <div class="ui active inverted dimmer">
-        <div class="ui text loader">Loading</div>
-      </div>
-      <p></p>
+        <div id="result"></div>
+        <div id="result-loading" class="ui segment">
+          <div class="ui active inverted dimmer">
+            <div class="ui text loader">Loading</div>
+          </div>
+          <p></p>
     </div>
     <br />
     <br />

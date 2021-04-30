@@ -2,6 +2,7 @@ var loc = {
   lat: undefined,
   lon: undefined
 };
+var mymap;
 async function loadLocation() {
   if (!loc.lat || !loc.lon)
   {
@@ -17,6 +18,9 @@ async function loadLocation() {
   $("#lat").val(parseFloat(loc.lat));
   $("#lon").val(parseFloat(loc.lon));
   let station_id = getQueryVariable("station_id");
+  mymap .setView([loc.lat, loc.lon], 9);
+  var marker = L.marker([loc.lat, loc.lon]).addTo(mymap);
+    marker.bindPopup(`${loc.lat}, ${loc.lon}`).openPopup();
   console.log(
     "request url:",
     station_id == undefined
@@ -164,6 +168,24 @@ function onsubmitloc()
   return false;
 }
 $(document).ready(() => {
+  mymap = L.map('map').setView([35,115], 4);
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1Ijoic29uZ2hvbmd5aSIsImEiOiJja25jdDdjZG4xM25iMnVvb2NjbDl3YjMwIn0.PJZgJQmBgR_g-vsSD7uKFA'
+    }).addTo(mymap);
+  function onMapClick(e) {
+      if (confirm(`Do you want to see the climate of (${e.latlng.lat},${e.latlng.lng})` ))
+      {
+        loc.lat=e.latlng.lat;
+        loc.lon=e.latlng.lng;
+        loadLocation();
+      }
+  }
+  mymap.on('click', onMapClick);
   loadLocation();
   loadView();
 });
