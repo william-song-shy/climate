@@ -4,9 +4,14 @@ var loc = {
 };
 var mymap;
 async function loadLocation() {
-  if ((!loc.lat || !loc.lon) && (!getQueryVariable("station_id")))
+  if (!loc.lat || !loc.lon)
   {
-    return;
+    if(getQueryVariable("station_id")){
+      loc.lat = loc.lon = 0;  
+    }
+    else {
+      return;
+    }
   }
   //var loc = {
   //  lat: getQueryVariable("lat"),
