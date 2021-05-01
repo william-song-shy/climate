@@ -84,8 +84,31 @@ async function loadLocation() {
              </table>`
       );
       $("#result-loading").css("display","none");
-      var month_table_data = "";
-      for (let x of result.data) {
+      var month_table_data_prcp = "<td>月总降水量</td>",
+        month_table_data_tavg = "<td>月平均气温</td>",
+        month_table_data_tmin = "<td>月最低气温</td>",
+        month_table_data_tmax = "<td>月最高气温</td>";
+      for (let x of result.data)
+      {
+        month_table_data_prcp+=`<td data-label=\"prcp\" style=\"${precipitation_color(
+          x.prcp
+        )}\">${x.prcp} mm</td>\
+        `;
+        month_table_data_tavg+=`<td data-label=\"tavg\" style=\"${temperature_color(
+          x.tavg
+        )}\">${x.tavg}​ ℃</td>\
+        `;
+        month_table_data_tmin+=`<td data-label=\"tmin\" style=\"${temperature_color(
+          x.tmin
+        )}\">${x.tmin}​ ℃</td>\
+        `;
+        month_table_data_tmax+=`<td data-label=\"tmax\" style=\"${temperature_color(
+          x.tmax
+        )}\">${x.tmax}​ ℃</td>\
+        `;
+        
+      }
+      /*for (let x of result.data) {
         month_table_data += `<tr><td data-label=\"month\">${x.month}</td>\
                  <td data-label=\"prcp\" style=\"${precipitation_color(
                    x.prcp
@@ -119,7 +142,32 @@ async function loadLocation() {
                  </tbody>\
                  </table>
                  `
-      );
+      );*/
+      $("#month").append(
+        `<table class=\"ui celled table\" style=\"text-align: center;\">\
+                 <thead>\
+        <tr><th> 月份 </th>
+        <th> 1月 </th>
+        <th> 2月 </th>
+        <th> 3月 </th>
+        <th> 4月 </th>
+        <th> 5月 </th>
+        <th> 6月 </th>
+        <th> 7月 </th>
+        <th> 8月 </th>
+        <th> 9月 </th>
+        <th> 10月 </th>
+        <th> 11月 </th>
+        <th> 12月 </th></tr></thead>
+        <tbody>\
+        <tr> ${month_table_data_prcp} </tr>\
+        <tr> ${month_table_data_tavg} </tr>\
+        <tr> ${month_table_data_tmin} </tr>\
+        <tr> ${month_table_data_tmax} </tr>\
+        </tbody>\ 
+        </table>
+        `
+      )
       $("#month-loading").css("display","none");
       if (getQueryVariable("station_id") != undefined) {
         $("#station-title").remove();
