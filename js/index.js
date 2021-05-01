@@ -4,7 +4,7 @@ var loc = {
 };
 var mymap;
 async function loadLocation() {
-  if (!loc.lat || !loc.lon)
+  if ((!loc.lat || !loc.lon) && (!getQueryVariable("station_id")))
   {
     return;
   }
