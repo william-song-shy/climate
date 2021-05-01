@@ -84,10 +84,10 @@ async function loadLocation() {
              </table>`
       );
       $("#result-loading").css("display","none");
-      var month_table_data_prcp = "<td>月总降水量</td>",
-        month_table_data_tavg = "<td>月平均气温</td>",
-        month_table_data_tmin = "<td>月最低气温</td>",
-        month_table_data_tmax = "<td>月最高气温</td>";
+      var month_table_data_prcp = "<td style=\"background: #f9fafb;font-weight:bold;\">月总降水量</td>",
+        month_table_data_tavg = "<td style=\"background: #f9fafb;font-weight:bold;\">月平均气温</td>",
+        month_table_data_tmin = "<td style=\"background: #f9fafb;font-weight:bold;\">月最低气温</td>",
+        month_table_data_tmax = "<td style=\"background: #f9fafb;font-weight:bold;\">月最高气温</td>";
       for (let x of result.data)
       {
         month_table_data_prcp+=`<td data-label=\"prcp\" style=\"${precipitation_color(
