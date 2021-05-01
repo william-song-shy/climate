@@ -29,60 +29,60 @@
     </a>
     <div class="right item">
       <div class="ui action input">
-        <input id="name" type="text" placeholder="Find a station by name..." />
-        <div id="search" class="ui submit button">Go</div>
+        <input id="name" type="text" placeholder="根据名称搜索站点" />
+        <div id="search" class="ui submit button">搜索</div>
       </div>
     </div>
   </div>
   <div class="ui container">
     <div class="ui grid">
       <div class="six wide column">
-        <h3>search</h3>
+        <h3>搜索</h3>
         <form class="ui form" onsubmit="return onsubmitloc()">
           <div class="field">
-            <label>latitude</label>
+            <label>纬度</label>
             <input id="lat" name="lat" type="text" />
           </div>
           <div class="field">
-            <label>longitude</label>
+            <label>经度</label>
             <input id="lon" name="lon" type="text" />
           </div>
-          <div class="ui submit button">Submit</div>
+          <div class="ui submit button">提交</div>
           <div class="ui error message"></div>
         </form>
       </div>
       <div class="two wide column"></div>
       <div class="eight wide column">
-        <h3>map</h3>
+        <h3>地图</h3>
         <div id="map" style="height: 420px;width: 560px;"></div>
       </div>
     </div>
     <div id="allresult">
-      <h3>result</h3>
+      <h3>查询结果</h3>
           <div id="result"></div>
           <div id="result-loading" class="ui segment">
             <div class="ui active inverted dimmer">
-              <div class="ui text loader">Loading</div>
+              <div class="ui text loader">加载中</div>
             </div>
             <p></p>
       </div>
       <br />
       <br />
-      <h3>month</h3>
+      <h3>逐月数据</h3>
       <div id="month"></div>
       <div id="month-loading" class="ui segment">
         <div class="ui active inverted dimmer">
-          <div class="ui text loader">Loading</div>
+          <div class="ui text loader">加载中</div>
         </div>
         <p></p>
       </div>
       <br />
       <br />
-      <h3 id="station-title">nearby stations</h3>
+      <h3 id="station-title">附近站点</h3>
       <div id="station"></div>
       <div id="station-loading" class="ui segment">
         <div class="ui active inverted dimmer">
-          <div class="ui text loader">Loading</div>
+          <div class="ui text loader">加载中</div>
         </div>
         <p></p>
       </div>
