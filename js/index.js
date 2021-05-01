@@ -26,14 +26,17 @@ async function loadLocation() {
   //  lon: getQueryVariable("lon")
   //};
   //if (loc.lat == undefined || loc.lon == undefined) loc = await getLocation();
-  console.log("lat:", loc.lat);
-  console.log("lon:", loc.lon);
-  $("#lat").val(parseFloat(loc.lat));
-  $("#lon").val(parseFloat(loc.lon));
   let station_id = getQueryVariable("station_id");
-  mymap .setView([loc.lat, loc.lon], 9);
-  var marker = L.marker([loc.lat, loc.lon]).addTo(mymap);
-    marker.bindPopup(`${loc.lat}, ${loc.lon}`).openPopup();
+  if (getQueryVariable("station_id") == undefined)
+  {
+    console.log("lat:", loc.lat);
+    console.log("lon:", loc.lon);
+    $("#lat").val(parseFloat(loc.lat));
+    $("#lon").val(parseFloat(loc.lon));
+    mymap .setView([loc.lat, loc.lon], 9);
+    var marker = L.marker([loc.lat, loc.lon]).addTo(mymap);
+      marker.bindPopup(`${loc.lat}, ${loc.lon}`).openPopup();
+  }
   console.log(
     "request url:",
     station_id == undefined
@@ -51,6 +54,13 @@ async function loadLocation() {
         : `https://climateapi.williamsongshy.repl.co/station/climate?id=${station_id}`,
     success: (result) => {
       if (getQueryVariable("station_id") != undefined) {
+        loc.lat=result.lat;
+        loc.lon=result.lon;
+        $("#lat").val(parseFloat(loc.lat));
+        $("#lon").val(parseFloat(loc.lon));
+        mymap .setView([loc.lat, loc.lon], 9);
+        var marker = L.marker([loc.lat, loc.lon]).addTo(mymap);
+          marker.bindPopup(`${result.name} (id:${result.id})`).openPopup();
         $("#result").append(
           `<h4>station ${result.name} (id:${result.id})</h4>`
         );
