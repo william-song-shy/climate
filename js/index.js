@@ -10,9 +10,17 @@ async function loadLocation() {
       loc.lat = loc.lon = 0;  
     }
     else {
+      $("#allresult").css("display","none");
       return;
     }
   }
+  $("#allresult").css("display","");
+  $("#result").html("");
+  $("#month").html("");
+  $("#station").html("");
+  $("#station-loading").css("display","");
+  $("#month-loading").css("display","");
+  $("#result-loading").css("display","");
   //var loc = {
   //  lat: getQueryVariable("lat"),
   //  lon: getQueryVariable("lon")
@@ -65,7 +73,7 @@ async function loadLocation() {
                </tbody>\
              </table>`
       );
-      $("#result-loading").remove();
+      $("#result-loading").css("display","none");
       var month_table_data = "";
       for (let x of result.data) {
         month_table_data += `<tr><td data-label=\"month\">${x.month}</td>\
@@ -102,13 +110,13 @@ async function loadLocation() {
                  </table>
                  `
       );
-      $("#month-loading").remove();
+      $("#month-loading").css("display","none");
       if (getQueryVariable("station_id") != undefined) {
         $("#station-title").remove();
         $("#station-loading").remove();
         return;
       }
-      $("#station-loading").remove();
+      $("#station-loading").css("display","none");
       var station_table_data = "";
       for (let x of result.nearby_stations) {
         let marker = L.marker([x.lat, x.lon]).addTo(mymap);
