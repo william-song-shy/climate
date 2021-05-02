@@ -75,7 +75,7 @@ async function loadLocation() {
                <tbody>\
                  <tr>\
                    <td data-label=\"climate type\">${result.chinesetype}气候</td>\
-                   <td data-label=\"country\"><img src="https://flagcdn.com/${result.country.toLowerCase()}.svg" width="16">${
+                   <td data-label=\"country\"><img src="https://meteostat.net/files/img/flags/4x3/${result.country}.svg" width="16">${
           result.country
         }</td>\
                    <td data-label=\"koppen type\">${result.koppentype}</td>\
