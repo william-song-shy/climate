@@ -75,8 +75,8 @@ async function loadLocation() {
                <tbody>\
                  <tr>\
                    <td data-label=\"climate type\">${result.chinesetype}气候</td>\
-                   <td data-label=\"country\"><img src="https://meteostat.net/files/img/flags/4x3/${result.country.toLowerCase()}.svg" width="16">${
-          result.country
+                   <td data-label=\"country\"><img src="https://meteostat.net/files/img/flags/4x3/${result.country.toLowerCase()}.svg" width="16">  ${
+          ISO3166_to_cn(result.country)
         }</td>\
                    <td data-label=\"koppen type\">${result.koppentype}</td>\
                  </tr>\
@@ -179,7 +179,7 @@ async function loadLocation() {
       for (let x of result.nearby_stations) {
         let marker = L.marker([x.lat, x.lon]).addTo(mymap);
         marker.bindPopup(`${x.id} ${x.name}`).openPopup();
-        station_table_data += `<tr><td data-label=\"country\"><img src="https://meteostat.net/files/img/flags/4x3/${x.country.toLowerCase()}.svg" width="16">${x.country}</td>\
+        station_table_data += `<tr><td data-label=\"country\"><img src="https://meteostat.net/files/img/flags/4x3/${x.country.toLowerCase()}.svg" width="16">  ${ISO3166_to_cn(x.country)}</td>\
                 <td data-label=\"id\"><a href=\"./?station_id=${x.id}\">${x.id}</a></td>\
                 <td data-label=\"lat\">${x.lat}</td>\
                 <td data-label=\"lon\">${x.lon}</td>\
