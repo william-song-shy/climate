@@ -3,6 +3,7 @@ var loc = {
   lon: undefined
 };
 var mymap;
+var mks;
 async function loadLocation() {
   if (!loc.lat || !loc.lon)
   {
@@ -27,6 +28,8 @@ async function loadLocation() {
   //};
   //if (loc.lat == undefined || loc.lon == undefined) loc = await getLocation();
   let station_id = getQueryVariable("station_id");
+  mks.remove();
+  mks=L.layerGroup();
   if (getQueryVariable("station_id") == undefined)
   {
     console.log("lat:", loc.lat);
@@ -34,8 +37,9 @@ async function loadLocation() {
     $("#lat").val(parseFloat(loc.lat));
     $("#lon").val(parseFloat(loc.lon));
     mymap .setView([loc.lat, loc.lon], 9);
-    var marker = L.marker([loc.lat, loc.lon]).addTo(mymap);
+    var marker = L.marker([loc.lat, loc.lon]);
       marker.bindPopup(`${loc.lat}, ${loc.lon}`).openPopup();
+      mks.addLayer(marker).addTo(mymap);
   }
   console.log(
     "request url:",
@@ -59,8 +63,9 @@ async function loadLocation() {
         $("#lat").val(parseFloat(loc.lat));
         $("#lon").val(parseFloat(loc.lon));
         mymap .setView([loc.lat, loc.lon], 9);
-        var marker = L.marker([loc.lat, loc.lon]).addTo(mymap);
+        var marker = L.marker([loc.lat, loc.lon]);
           marker.bindPopup(`${result.name} (id:${result.id})`).openPopup();
+          mks.addLayer(marker).addTo(mymap);
         $("#result").append(
           `<h4>station ${result.name} (id:${result.id})</h4>`
         );
@@ -177,8 +182,9 @@ async function loadLocation() {
       $("#station-loading").css("display","none");
       var station_table_data = "";
       for (let x of result.nearby_stations) {
-        let marker = L.marker([x.lat, x.lon]).addTo(mymap);
+        let marker = L.marker([x.lat, x.lon]);
         marker.bindPopup(`${x.id} ${x.name}`).openPopup();
+        mks.addLayer(marker).addTo(mymap);
         station_table_data += `<tr><td data-label=\"country\"><img src="https://meteostat.net/files/img/flags/4x3/${x.country.toLowerCase()}.svg" width="16">  ${ISO3166_to_cn(x.country)}</td>\
                 <td data-label=\"id\"><a href=\"./?station_id=${x.id}\">${x.id}</a></td>\
                 <td data-label=\"lat\">${x.lat}</td>\
@@ -291,6 +297,7 @@ $(document).ready(() => {
       }
   }
   mymap.on('click', onMapClick);
+  mks=L.layerGroup();
   loadLocation();
   loadView();
 });
