@@ -9,6 +9,9 @@ async function loadLocation() {
   {
     if(getQueryVariable("station_id")){
       loc.lat = loc.lon = 0;  
+      $("#lat").attr("disabled","");
+      $("#lon").attr("disabled","");
+      $("#submit").css("display","none");
     }
     else {
       $("#allresult").css("display","none");
@@ -296,7 +299,8 @@ $(document).ready(() => {
         loadLocation();
       }
   }
-  mymap.on('click', onMapClick);
+  if (getQueryVariable("station_id") == undefined)
+    mymap.on('click', onMapClick);
   mks=L.layerGroup();
   loadLocation();
   loadView();
