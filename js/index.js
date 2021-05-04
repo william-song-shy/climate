@@ -228,9 +228,32 @@ async function loadView() {
       }
     }
   });
-  $("#search").click(() => {
+  /*$("#search").click(() => {
     console.log("new url:", `./search.html?name=${$("#name").val()}`);
     window.location.href = `./search.html?name=${$("#name").val()}`;
+  });*/
+  $('#search')
+  .search({
+    minCharacters : 3,
+    apiSettings: {
+      url: 'https://climateapi.williamsongshy.repl.co/station/find?name={query}',
+      onResponse: function(resp){
+        console.log(resp,Object.values(resp));
+        var
+        response = {
+          results : []
+        };
+        $.each(Object.values(resp),function(index,item){
+          console.log(item.id);
+          response.results.push({
+            title : item.name,
+            description : `位于${ISO3166_to_cn(item.country)}境内，(${item.lat},${item.lon}),id为${item.id}`,
+            url : `./?station_id=${item.id}`
+          });
+        });
+        return response;
+      }
+    }
   });
 }
 function onsubmitloc()

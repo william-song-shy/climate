@@ -28,10 +28,20 @@
     <a class="item active" href="index.html">
       Home
     </a>
-    <div class="right item">
+    <!--<div class="right item">
       <div class="ui action input">
         <input id="name" type="text" placeholder="根据名称搜索站点" />
         <div id="search" class="ui submit button">搜索</div>
+      </div>
+    </div>
+  </div>-->
+    <div class="right item">
+      <div class="ui search" id="search">
+        <div class="ui icon input">
+          <input class="prompt" type="text" placeholder="根据名称搜索站点">
+          <i class="search icon"></i>
+        </div>
+        <div class="results" style="left:-50px !important;z-index: 99999;"></div>
       </div>
     </div>
   </div>
