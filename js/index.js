@@ -69,7 +69,7 @@ async function loadLocation() {
         `<table class=\"ui celled table\">\
                <thead>\
                  <tr><th>气候类型</th>\
-                 <th>国家</th>\
+                 <th>国家/地区</th>\
                  <th>柯本气候类型</th>\
                </tr></thead>\
                <tbody>\
@@ -189,7 +189,7 @@ async function loadLocation() {
       $("#station").append(
         `<table class=\"ui celled table\">\
                  <thead>\
-                   <tr><th>国家</th>\
+                   <tr><th>国家/地区</th>\
                    <th>id</th>\
                    <th>纬度</th>\
                    <th>经度</th>\
