@@ -263,6 +263,15 @@ function onsubmitloc()
   loadLocation();
   return false;
 }
+function fix_lon (val)
+{
+  val=val%360
+	if (val<-180)
+		val+=360
+	else if  (val>180)
+		val-=360
+	return val
+}
 $(document).ready(() => {
   mymap = L.map('map').setView([35,115], 4);
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -274,10 +283,10 @@ $(document).ready(() => {
     accessToken: 'pk.eyJ1Ijoic29uZ2hvbmd5aSIsImEiOiJja25jdDdjZG4xM25iMnVvb2NjbDl3YjMwIn0.PJZgJQmBgR_g-vsSD7uKFA'
     }).addTo(mymap);
   function onMapClick(e) {
-      if (confirm(`Do you want to see the climate of (${e.latlng.lat},${e.latlng.lng})` ))
+      if (confirm(`Do you want to see the climate of (${e.latlng.lat},${fix_lon(e.latlng.lng)})` ))
       {
         loc.lat=e.latlng.lat;
-        loc.lon=e.latlng.lng;
+        loc.lon=fix_lon(e.latlng.lng);
         loadLocation();
       }
   }
