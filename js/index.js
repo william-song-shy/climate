@@ -12,6 +12,7 @@ async function loadLocation() {
       $("#lat").attr("disabled","");
       $("#lon").attr("disabled","");
       $("#submit").css("display","none");
+      $("#copylatlon").css("display","");
     }
     else {
       $("#allresult").css("display","none");
@@ -65,6 +66,14 @@ async function loadLocation() {
         loc.lon=result.lon;
         $("#lat").val(parseFloat(loc.lat));
         $("#lon").val(parseFloat(loc.lon));
+        var clipboard = new ClipboardJS('#copylatlon', {
+          text: function() {
+              //console.log(loc)
+              $("#copylatlon").text("复制成功");
+              setTimeout(function(){$("#copylatlon").text("复制经纬度信息");},1000);
+              return `(${loc.lat},${loc.lon})`;
+          }
+      });
         mymap .setView([loc.lat, loc.lon], 9);
         var marker = L.marker([loc.lat, loc.lon]);
           marker.bindPopup(`${result.name} (id:${result.id})`).openPopup();
@@ -267,6 +276,8 @@ async function loadView() {
 }
 function onsubmitloc()
 {
+  if (getQueryVariable("station_id") != undefined)
+    return false;
   loc.lat=$("#lat").val()
   loc.lon=$("#lon").val()
   loadLocation();

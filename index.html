@@ -9,6 +9,7 @@
   />
   <script src="https://cdn.bootcdn.net/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
   <script src="js/util.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
   <script src="js/ISO3166_to_cn.js"></script>
   <script src="js/climatecolor.js"></script>
   <script src="js/index.js"></script>
@@ -59,6 +60,7 @@
             <input id="lon" name="lon" type="text" />
           </div>
           <div class="ui submit button" id="submit">提交</div>
+          <button class="ui submit button" id="copylatlon" style="display: none;">复制经纬度信息</button>
           <div class="ui error message"></div>
         </form>
       </div>
