@@ -48,18 +48,18 @@ async function loadLocation() {
   console.log(
     "request url:",
     station_id == undefined
-      ? `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseFloat(
+      ? `https://climate.rotriw.com/point/climate?lat=${parseFloat(
           loc.lat
         )}&lon=${parseFloat(loc.lon)}`
-      : `https://climateapi.williamsongshy.repl.co/station/climate?id=${station_id}`
+      : `https://climate.rotriw.com/station/climate?id=${station_id}`
   );
   $.ajax({
     url:
       station_id == undefined
-        ? `https://climateapi.williamsongshy.repl.co/point/climate?lat=${parseFloat(
+        ? `https://climate.rotriw.com/point/climate?lat=${parseFloat(
             loc.lat
           )}&lon=${parseFloat(loc.lon)}`
-        : `https://climateapi.williamsongshy.repl.co/station/climate?id=${station_id}`,
+        : `https://climate.rotriw.com/station/climate?id=${station_id}`,
     success: (result) => {
       if (getQueryVariable("station_id") != undefined) {
         loc.lat=result.lat;
@@ -254,7 +254,7 @@ async function loadView() {
   .search({
     minCharacters : 3,
     apiSettings: {
-      url: 'https://climateapi.williamsongshy.repl.co/station/find?name={query}',
+      url: 'https://climate.rotriw.com/station/find?name={query}',
       onResponse: function(resp){
         console.log(resp,Object.values(resp));
         var
