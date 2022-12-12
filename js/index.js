@@ -230,7 +230,7 @@ async function loadLocation() {
                  `
       );
     },
-    error: (error) => {
+    error: function(xhr, textStatus, errorThrown ) {
       // console.log(error);
       $.toast({
         class: "error",
