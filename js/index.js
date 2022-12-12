@@ -53,6 +53,11 @@ async function loadLocation() {
         )}&lon=${parseFloat(loc.lon)}`
       : `https://climate.rotriw.com/station/climate?id=${station_id}`
   );
+  var retries = 0;
+  $.toast({
+    message:"正在获取数据...",
+    showProgress: 'bottom'
+  });
   $.ajax({
     url:
       station_id == undefined
@@ -61,6 +66,11 @@ async function loadLocation() {
           )}&lon=${parseFloat(loc.lon)}`
         : `https://climate.rotriw.com/station/climate?id=${station_id}`,
     success: (result) => {
+      $.toast({
+        class:"success",
+        message:"获取数据成功",
+        showProgress: 'bottom'
+      });
       if (getQueryVariable("station_id") != undefined) {
         loc.lat=result.lat;
         loc.lon=result.lon;
@@ -219,6 +229,26 @@ async function loadLocation() {
                  </table>
                  `
       );
+    },
+    error: (error) => {
+      // console.log(error);
+      $.toast({
+        class: "error",
+        message : "请求失败",
+        showProgress : 'bottom'
+      });
+      if (retries < 3) {
+        retries++;
+        let delay=Math.pow(2,retries)*1000;
+        setTimeout(() => {
+          $.toast({
+            class: "info",
+            message : `正在重试，第${retries}次`,
+            showProgress : 'bottom'
+          })
+          $.ajax(this);
+        }, delay);
+      }
     }
   });
 }
