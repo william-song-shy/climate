@@ -16,7 +16,13 @@ async function loadLocation() {
     }
     else {
       $("#allresult").css("display","none");
-      return;
+      if (getQueryVariable("lat") && getQueryVariable("lon")){
+        loc.lat=getQueryVariable("lat")
+        loc.lon=getQueryVariable("lon")
+
+      }
+      else
+        return;
     }
   }
   $("#allresult").css("display","");
@@ -203,8 +209,10 @@ async function loadLocation() {
       }
       $("#station-loading").css("display","none");
       var station_table_data = "";
+      let nearby_stations=[];
       for (let x of result.nearby_stations) {
         let marker = L.marker([x.lat, x.lon]);
+        nearby_stations.push([x.lat, x.lon]);
         marker.bindPopup(`${x.id} ${x.name}`).openPopup();
         mks.addLayer(marker).addTo(mymap);
         station_table_data += `<tr><td data-label=\"country\"><img src="https://media.meteostat.net/assets/flags/4x3/${x.country.toLowerCase()}.svg" width="16">  ${ISO3166_to_cn(x.country)}</td>\
@@ -214,6 +222,7 @@ async function loadLocation() {
                 <td data-label=\"name\">${x.name}</td>\
                 `;
       }
+      mymap.fitBounds(nearby_stations);
       $("#station").append(
         `<table class=\"ui celled table\">\
                  <thead>\
@@ -284,7 +293,7 @@ async function loadView() {
   .search({
     minCharacters : 3,
     apiSettings: {
-      url: 'https://climate.rotriw.com/station/find?name={query}',
+      url: 'https://climate.rotriw.com/place/find?name={query}',
       onResponse: function(resp){
         console.log(resp,Object.values(resp));
         var
@@ -292,11 +301,10 @@ async function loadView() {
           results : []
         };
         $.each(Object.values(resp),function(index,item){
-          console.log(item.id);
           response.results.push({
-            title : item.name,
-            description : `位于${ISO3166_to_cn(item.country)}境内，(${item.lat},${item.lon}),id为${item.id}`,
-            url : `./?station_id=${item.id}`
+            title : `${item.zh_name}<br>${item.en_name}`,
+            description : `(${item.lat},${item.lon})`,
+            url : `./?lat=${item.lat}&lon=${item.lon}&bbox=${item.bbox[0]},${item.bbox[1]},${item.bbox[2]},${item.bbox[3]}`
           });
         });
         return response;
