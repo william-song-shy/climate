@@ -209,7 +209,7 @@ async function loadLocation() {
       }
       $("#station-loading").css("display","none");
       var station_table_data = "";
-      let nearby_stations=[];
+      let nearby_stations=[[loc.lat,loc.lon]];
       for (let x of result.nearby_stations) {
         let marker = L.marker([x.lat, x.lon]);
         nearby_stations.push([x.lat, x.lon]);
