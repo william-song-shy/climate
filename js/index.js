@@ -222,7 +222,7 @@ async function loadLocation() {
                 <td data-label=\"name\">${x.name}</td>\
                 `;
       }
-      mymap.fitBounds(nearby_stations);
+      mymap.fitBounds(nearby_stations,maxZoom=10);
       $("#station").append(
         `<table class=\"ui celled table\">\
                  <thead>\
@@ -291,7 +291,7 @@ async function loadView() {
   });*/
   $('#search')
   .search({
-    minCharacters : 3,
+    minCharacters : 1,
     apiSettings: {
       url: 'https://climate.rotriw.com/place/find?name={query}',
       onResponse: function(resp){
