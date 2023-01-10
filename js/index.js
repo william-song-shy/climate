@@ -304,7 +304,7 @@ async function loadView() {
           response.results.push({
             title : `${item.zh_name}<br>${item.en_name}`,
             description : `(${item.lat},${item.lon})`,
-            url : `./?lat=${item.lat}&lon=${item.lon}&bbox=${item.bbox[0]},${item.bbox[1]},${item.bbox[2]},${item.bbox[3]}`
+            url : `./?lat=${item.lat}&lon=${item.lon}`
           });
         });
         return response;
