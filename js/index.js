@@ -136,6 +136,7 @@ async function loadLocation() {
             axisLabel: {
               formatter: '{value} ml'
             },
+            boundaryGap:[0,'20%'],
             alignTicks: true
           },
           {
