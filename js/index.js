@@ -4,6 +4,8 @@ var loc = {
 };
 var mymap;
 var mks;
+var e_op;
+var mychart;
 async function loadLocation() {
   if (!loc.lat || !loc.lon)
   {
@@ -29,6 +31,7 @@ async function loadLocation() {
   $("#result").html("");
   $("#month").html("");
   $("#station").html("");
+  $("#chart").hide();
   $("#station-loading").css("display","");
   $("#month-loading").css("display","");
   $("#result-loading").css("display","");
@@ -98,6 +101,78 @@ async function loadLocation() {
           `<h4>station ${result.name} (id:${result.id})</h4>`
         );
       }
+      pres=[],temp=[];
+      for (let x of result.data){
+        pres.push(x.prcp);
+        temp.push(x.tavg);
+      }
+      $("#chart").show();
+      e_op = {
+        tooltip: {
+          trigger: 'axis'
+        },
+        toolbox: {
+          feature: {
+            restore: { show: true },
+            saveAsImage: { show: true }
+          }
+        },
+        legend: {
+          data: ['Precipitation', 'Temperature']
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            axisPointer: {
+              type: 'shadow'
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            name: 'Precipitation',
+            axisLabel: {
+              formatter: '{value} ml'
+            },
+            alignTicks: true
+          },
+          {
+            type: 'value',
+            name: 'Temperature',
+            axisLabel: {
+              formatter: '{value} °C'
+            },
+            alignTicks: true
+          },
+        ],
+        series: [
+          {
+            name: 'Precipitation',
+            type: 'bar',
+            tooltip: {
+              valueFormatter: function (value) {
+                return value + ' ml';
+              }
+            },
+            data: pres
+          },
+          {
+            name: 'Temperature',
+            type: 'line',
+            yAxisIndex: 1,
+            tooltip: {
+              valueFormatter: function (value) {
+                return value + ' °C';
+              }
+            },
+            data: temp
+          }
+        ]
+      };
+      mychart = echarts.init(document.getElementById('chart'));
+      mychart.setOption(e_op);
       $("#result").append(
         `<table class=\"ui celled table\">\
                <thead>\
