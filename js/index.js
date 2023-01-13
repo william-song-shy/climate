@@ -7,54 +7,52 @@ var mks;
 var e_op;
 var mychart;
 async function loadLocation() {
-  if (!loc.lat || !loc.lon)
-  {
-    if(getQueryVariable("station_id")){
-      loc.lat = loc.lon = 0;  
-      $("#lat").attr("disabled","");
-      $("#lon").attr("disabled","");
-      $("#submit").css("display","none");
-      $("#copylatlon").css("display","");
+  if (!loc.lat || !loc.lon) {
+    if (getQueryVariable("station_id")) {
+      loc.lat = loc.lon = 0;
+      $("#lat").attr("disabled", "");
+      $("#lon").attr("disabled", "");
+      $("#submit").css("display", "none");
+      $("#copylatlon").css("display", "");
     }
     else {
-      $("#allresult").css("display","none");
-      if (getQueryVariable("lat") && getQueryVariable("lon")){
-        loc.lat=getQueryVariable("lat")
-        loc.lon=getQueryVariable("lon")
+      $("#allresult").css("display", "none");
+      if (getQueryVariable("lat") && getQueryVariable("lon")) {
+        loc.lat = getQueryVariable("lat")
+        loc.lon = getQueryVariable("lon")
 
       }
       else
         return;
     }
   }
-  $("#allresult").css("display","");
+  $("#allresult").css("display", "");
   $("#result").html("");
   $("#month").html("");
   $("#station").html("");
   $("#chart").hide();
-  $("#station-loading").css("display","");
-  $("#month-loading").css("display","");
-  $("#result-loading").css("display","");
+  $("#station-loading").css("display", "");
+  $("#month-loading").css("display", "");
+  $("#result-loading").css("display", "");
   //var loc = {
   //  lat: getQueryVariable("lat"),
   //  lon: getQueryVariable("lon")
   //};
   //if (loc.lat == undefined || loc.lon == undefined) loc = await getLocation();
   let station_id = getQueryVariable("station_id");
-  for (let i of mks){
+  for (let i of mks) {
     i.remove();
   }
-  mks=[];
-  if (getQueryVariable("station_id") == undefined)
-  {
+  mks = [];
+  if (getQueryVariable("station_id") == undefined) {
     console.log("lat:", loc.lat);
     console.log("lon:", loc.lon);
     $("#lat").val(parseFloat(loc.lat));
     $("#lon").val(parseFloat(loc.lon));
-    mymap .setCenter([loc.lon,loc.lat ]);
+    mymap.setCenter([loc.lon, loc.lat]);
     mymap.setZoom(9);
-    var marker = new mapboxgl.Marker().setLngLat([loc.lon,loc.lat]);
-    marker.setPopup(new mapboxgl.Popup({closeOnMove:true}).setText(`${loc.lat}, ${loc.lon}`));
+    var marker = new mapboxgl.Marker().setLngLat([loc.lon, loc.lat]);
+    marker.setPopup(new mapboxgl.Popup({ closeOnMove: true }).setText(`${loc.lat}, ${loc.lon}`));
     mks.push(marker);
     marker.addTo(mymap);
   }
@@ -62,53 +60,53 @@ async function loadLocation() {
     "request url:",
     station_id == undefined
       ? `https://climate.rotriw.com/point/climate?lat=${parseFloat(
-          loc.lat
-        )}&lon=${parseFloat(loc.lon)}`
+        loc.lat
+      )}&lon=${parseFloat(loc.lon)}`
       : `https://climate.rotriw.com/station/climate?id=${station_id}`
   );
   var retries = 0;
   $.toast({
-    message:"正在获取数据...",
+    message: "正在获取数据...",
     showProgress: 'bottom'
   });
   $.ajax({
     url:
       station_id == undefined
         ? `https://climate.rotriw.com/point/climate?lat=${parseFloat(
-            loc.lat
-          )}&lon=${parseFloat(loc.lon)}`
+          loc.lat
+        )}&lon=${parseFloat(loc.lon)}`
         : `https://climate.rotriw.com/station/climate?id=${station_id}`,
     success: (result) => {
       $.toast({
-        class:"success",
-        message:"获取数据成功",
+        class: "success",
+        message: "获取数据成功",
         showProgress: 'bottom'
       });
       if (getQueryVariable("station_id") != undefined) {
-        loc.lat=result.lat;
-        loc.lon=result.lon;
+        loc.lat = result.lat;
+        loc.lon = result.lon;
         $("#lat").val(parseFloat(loc.lat));
         $("#lon").val(parseFloat(loc.lon));
         var clipboard = new ClipboardJS('#copylatlon', {
-          text: function() {
-              //console.log(loc)
-              $("#copylatlon").text("复制成功");
-              setTimeout(function(){$("#copylatlon").text("复制经纬度信息");},1000);
-              return `(${loc.lat},${loc.lon})`;
+          text: function () {
+            //console.log(loc)
+            $("#copylatlon").text("复制成功");
+            setTimeout(function () { $("#copylatlon").text("复制经纬度信息"); }, 1000);
+            return `(${loc.lat},${loc.lon})`;
           }
-      });
-      mymap .setCenter([loc.lon,loc.lat ]);
-      mymap.setZoom(9);
-      var marker = new mapboxgl.Marker().setLngLat([loc.lon,loc.lat]);
-      marker.setPopup(new mapboxgl.Popup({closeOnMove:true}).setText(`${loc.lat}, ${loc.lon}`));
-      mks.push(marker);
-      marker.addTo(mymap);
+        });
+        mymap.setCenter([loc.lon, loc.lat]);
+        mymap.setZoom(9);
+        var marker = new mapboxgl.Marker().setLngLat([loc.lon, loc.lat]);
+        marker.setPopup(new mapboxgl.Popup({ closeOnMove: true }).setText(`${loc.lat}, ${loc.lon}`));
+        mks.push(marker);
+        marker.addTo(mymap);
         $("#result").append(
           `<h4>station ${result.name} (id:${result.id})</h4>`
         );
       }
-      pres=[],temp=[];
-      for (let x of result.data){
+      pres = [], temp = [];
+      for (let x of result.data) {
         pres.push(x.prcp);
         temp.push(x.tavg);
       }
@@ -129,7 +127,7 @@ async function loadLocation() {
         xAxis: [
           {
             type: 'category',
-            data: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             axisPointer: {
               type: 'shadow'
             }
@@ -142,7 +140,7 @@ async function loadLocation() {
             axisLabel: {
               formatter: '{value} ml'
             },
-            boundaryGap:[0,'20%'],
+            boundaryGap: [0, '20%'],
             alignTicks: true
           },
           {
@@ -190,38 +188,36 @@ async function loadLocation() {
                <tbody>\
                  <tr>\
                    <td data-label=\"climate type\">${result.chinesetype}气候</td>\
-                   <td data-label=\"country\"><img src="https://media.meteostat.net/assets/flags/4x3/${result.country.toLowerCase()}.svg" width="16">  ${
-          ISO3166_to_cn(result.country)
+                   <td data-label=\"country\"><img src="https://media.meteostat.net/assets/flags/4x3/${result.country.toLowerCase()}.svg" width="16">  ${ISO3166_to_cn(result.country)
         }</td>\
                    <td data-label=\"koppen type\">${result.koppentype}</td>\
                  </tr>\
                </tbody>\
              </table>`
       );
-      $("#result-loading").css("display","none");
+      $("#result-loading").css("display", "none");
       var month_table_data_prcp = "<td style=\"background: #f9fafb;font-weight:bold;\">月总降水量</td>",
         month_table_data_tavg = "<td style=\"background: #f9fafb;font-weight:bold;\">月平均气温</td>",
         month_table_data_tmin = "<td style=\"background: #f9fafb;font-weight:bold;\">月最低气温</td>",
         month_table_data_tmax = "<td style=\"background: #f9fafb;font-weight:bold;\">月最高气温</td>";
-      for (let x of result.data)
-      {
-        month_table_data_prcp+=`<td data-label=\"prcp\" style=\"${precipitation_color(
+      for (let x of result.data) {
+        month_table_data_prcp += `<td data-label=\"prcp\" style=\"${precipitation_color(
           x.prcp
         )}\">${x.prcp} mm</td>\
         `;
-        month_table_data_tavg+=`<td data-label=\"tavg\" style=\"${temperature_color(
+        month_table_data_tavg += `<td data-label=\"tavg\" style=\"${temperature_color(
           x.tavg
         )}\">${x.tavg}​ ℃</td>\
         `;
-        month_table_data_tmin+=`<td data-label=\"tmin\" style=\"${temperature_color(
+        month_table_data_tmin += `<td data-label=\"tmin\" style=\"${temperature_color(
           x.tmin
         )}\">${x.tmin}​ ℃</td>\
         `;
-        month_table_data_tmax+=`<td data-label=\"tmax\" style=\"${temperature_color(
+        month_table_data_tmax += `<td data-label=\"tmax\" style=\"${temperature_color(
           x.tmax
         )}\">${x.tmax}​ ℃</td>\
         `;
-        
+
       }
       /*for (let x of result.data) {
         month_table_data += `<tr><td data-label=\"month\">${x.month}</td>\
@@ -283,21 +279,21 @@ async function loadLocation() {
         </table>
         `
       )
-      $("#month-loading").css("display","none");
+      $("#month-loading").css("display", "none");
       if (getQueryVariable("station_id") != undefined) {
         $("#station-title").remove();
         $("#station-loading").remove();
         return;
       }
-      $("#station-loading").css("display","none");
+      $("#station-loading").css("display", "none");
       var station_table_data = "";
-      let nearby_stations=[[loc.lon,loc.lat]];
+      let nearby_stations = [[loc.lon, loc.lat]];
       for (let x of result.nearby_stations) {
-        let marker = new mapboxgl.Marker().setLngLat([x.lon,x.lat]);
-    marker.setPopup(new mapboxgl.Popup({closeOnMove:true}).setText(`${x.id} ${x.name}`));
-    mks.push(marker);
-    marker.addTo(mymap);
-    nearby_stations.push([x.lon,x.lat])
+        let marker = new mapboxgl.Marker().setLngLat([x.lon, x.lat]);
+        marker.setPopup(new mapboxgl.Popup({ closeOnMove: true }).setText(`${x.id} ${x.name}`));
+        mks.push(marker);
+        marker.addTo(mymap);
+        nearby_stations.push([x.lon, x.lat])
         station_table_data += `<tr><td data-label=\"country\"><img src="https://media.meteostat.net/assets/flags/4x3/${x.country.toLowerCase()}.svg" width="16">  ${ISO3166_to_cn(x.country)}</td>\
                 <td data-label=\"id\"><a href=\"./?station_id=${x.id}\">${x.id}</a></td>\
                 <td data-label=\"lat\">${x.lat}</td>\
@@ -310,7 +306,7 @@ async function loadLocation() {
       for (let x of nearby_stations) {
         bound.extend(x);
       }
-      mymap.fitBounds(bound,{
+      mymap.fitBounds(bound, {
         padding: 50,
         maxZoom: 10
       });
@@ -330,21 +326,21 @@ async function loadLocation() {
                  `
       );
     },
-    error: function(xhr, textStatus, errorThrown ) {
+    error: function (xhr, textStatus, errorThrown) {
       // console.log(error);
       $.toast({
         class: "error",
-        message : "请求失败",
-        showProgress : 'bottom'
+        message: "请求失败",
+        showProgress: 'bottom'
       });
       if (retries < 3) {
         retries++;
-        let delay=Math.pow(2,retries)*1000;
+        let delay = Math.pow(2, retries) * 1000;
         setTimeout(() => {
           $.toast({
             class: "info",
-            message : `正在重试，第${retries}次`,
-            showProgress : 'bottom'
+            message: `正在重试，第${retries}次`,
+            showProgress: 'bottom'
           })
           $.ajax(this);
         }, delay);
@@ -381,45 +377,43 @@ async function loadView() {
     window.location.href = `./search.html?name=${$("#name").val()}`;
   });*/
   $('#search')
-  .search({
-    minCharacters : 1,
-    apiSettings: {
-      url: 'https://climate.rotriw.com/place/find?name={query}',
-      onResponse: function(resp){
-        console.log(resp,Object.values(resp));
-        var
-        response = {
-          results : []
-        };
-        $.each(Object.values(resp),function(index,item){
-          response.results.push({
-            title : `${item.zh_name}<br>${item.en_name}`,
-            description : `(${item.lat},${item.lon})`,
-            url : `./?lat=${item.lat}&lon=${item.lon}`
+    .search({
+      minCharacters: 1,
+      apiSettings: {
+        url: 'https://climate.rotriw.com/place/find?name={query}',
+        onResponse: function (resp) {
+          console.log(resp, Object.values(resp));
+          var
+            response = {
+              results: []
+            };
+          $.each(Object.values(resp), function (index, item) {
+            response.results.push({
+              title: `${item.zh_name}<br>${item.en_name}`,
+              description: `(${item.lat},${item.lon})`,
+              url: `./?lat=${item.lat}&lon=${item.lon}`
+            });
           });
-        });
-        return response;
+          return response;
+        }
       }
-    }
-  });
+    });
 }
-function onsubmitloc()
-{
+function onsubmitloc() {
   if (getQueryVariable("station_id") != undefined)
     return false;
-  loc.lat=$("#lat").val()
-  loc.lon=$("#lon").val()
+  loc.lat = $("#lat").val()
+  loc.lon = $("#lon").val()
   loadLocation();
   return false;
 }
-function fix_lon (val)
-{
-  val=val%360
-	if (val<-180)
-		val+=360
-	else if  (val>180)
-		val-=360
-	return val
+function fix_lon(val) {
+  val = val % 360
+  if (val < -180)
+    val += 360
+  else if (val > 180)
+    val -= 360
+  return val
 }
 $(document).ready(() => {
   // mymap = L.map('map').setView([35,115], 4);
@@ -432,25 +426,24 @@ $(document).ready(() => {
   //   accessToken: 'pk.eyJ1Ijoic29uZ2hvbmd5aSIsImEiOiJja25jdDdjZG4xM25iMnVvb2NjbDl3YjMwIn0.PJZgJQmBgR_g-vsSD7uKFA'
   //   }).addTo(mymap);
   function onMapClick(e) {
-    console.log( e.target)
-      if (confirm(`Do you want to see the climate of (${e.lngLat.lat},${fix_lon(e.lngLat.lng)})` ))
-      {
-        loc.lat=e.lngLat.lat;
-        loc.lon=fix_lon(e.lngLat.lng);
-        loadLocation();
-      }
+    console.log(e.target)
+    if (confirm(`Do you want to see the climate of (${e.lngLat.lat},${fix_lon(e.lngLat.lng)})`)) {
+      loc.lat = e.lngLat.lat;
+      loc.lon = fix_lon(e.lngLat.lng);
+      loadLocation();
+    }
   }
   mapboxgl.accessToken = 'pk.eyJ1Ijoic29uZ2hvbmd5aSIsImEiOiJja25jdDdjZG4xM25iMnVvb2NjbDl3YjMwIn0.PJZgJQmBgR_g-vsSD7uKFA'
-  mymap = new mapboxgl.Map ({
+  mymap = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/songhongyi/clcspak0b000615kevtw1s8ci',
-    center: [115,35],
+    center: [115, 35],
     zoom: 4,
     dragRotate: false
   });
   if (getQueryVariable("station_id") == undefined)
     mymap.on('click', onMapClick);
-  mks=[];
+  mks = [];
   loadLocation();
   loadView();
 });
