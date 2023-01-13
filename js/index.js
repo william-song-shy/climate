@@ -41,18 +41,22 @@ async function loadLocation() {
   //};
   //if (loc.lat == undefined || loc.lon == undefined) loc = await getLocation();
   let station_id = getQueryVariable("station_id");
-  mks.remove();
-  mks=L.layerGroup();
+  for (let i of mks){
+    i.remove();
+  }
+  mks=[];
   if (getQueryVariable("station_id") == undefined)
   {
     console.log("lat:", loc.lat);
     console.log("lon:", loc.lon);
     $("#lat").val(parseFloat(loc.lat));
     $("#lon").val(parseFloat(loc.lon));
-    mymap .setView([loc.lat, loc.lon], 9);
-    var marker = L.marker([loc.lat, loc.lon]);
-      marker.bindPopup(`${loc.lat}, ${loc.lon}`).openPopup();
-      mks.addLayer(marker).addTo(mymap);
+    mymap .setCenter([loc.lon,loc.lat ]);
+    mymap.setZoom(9);
+    var marker = new mapboxgl.Marker().setLngLat([loc.lon,loc.lat]);
+    marker.setPopup(new mapboxgl.Popup({closeOnMove:true}).setText(`${loc.lat}, ${loc.lon}`));
+    mks.push(marker);
+    marker.addTo(mymap);
   }
   console.log(
     "request url:",
@@ -93,10 +97,12 @@ async function loadLocation() {
               return `(${loc.lat},${loc.lon})`;
           }
       });
-        mymap .setView([loc.lat, loc.lon], 9);
-        var marker = L.marker([loc.lat, loc.lon]);
-          marker.bindPopup(`${result.name} (id:${result.id})`).openPopup();
-          mks.addLayer(marker).addTo(mymap);
+      mymap .setCenter([loc.lon,loc.lat ]);
+      mymap.setZoom(9);
+      var marker = new mapboxgl.Marker().setLngLat([loc.lon,loc.lat]);
+      marker.setPopup(new mapboxgl.Popup({closeOnMove:true}).setText(`${loc.lat}, ${loc.lon}`));
+      mks.push(marker);
+      marker.addTo(mymap);
         $("#result").append(
           `<h4>station ${result.name} (id:${result.id})</h4>`
         );
@@ -285,12 +291,13 @@ async function loadLocation() {
       }
       $("#station-loading").css("display","none");
       var station_table_data = "";
-      let nearby_stations=[[loc.lat,loc.lon]];
+      let nearby_stations=[[loc.lon,loc.lat]];
       for (let x of result.nearby_stations) {
-        let marker = L.marker([x.lat, x.lon]);
-        nearby_stations.push([x.lat, x.lon]);
-        marker.bindPopup(`${x.id} ${x.name}`).openPopup();
-        mks.addLayer(marker).addTo(mymap);
+        let marker = new mapboxgl.Marker().setLngLat([x.lon,x.lat]);
+    marker.setPopup(new mapboxgl.Popup({closeOnMove:true}).setText(`${x.id} ${x.name}`));
+    mks.push(marker);
+    marker.addTo(mymap);
+    nearby_stations.push([x.lon,x.lat])
         station_table_data += `<tr><td data-label=\"country\"><img src="https://media.meteostat.net/assets/flags/4x3/${x.country.toLowerCase()}.svg" width="16">  ${ISO3166_to_cn(x.country)}</td>\
                 <td data-label=\"id\"><a href=\"./?station_id=${x.id}\">${x.id}</a></td>\
                 <td data-label=\"lat\">${x.lat}</td>\
@@ -298,7 +305,15 @@ async function loadLocation() {
                 <td data-label=\"name\">${x.name}</td>\
                 `;
       }
-      mymap.fitBounds(nearby_stations,maxZoom=10);
+      // console.log(nearby_stations);
+      let bound = new mapboxgl.LngLatBounds();
+      for (let x of nearby_stations) {
+        bound.extend(x);
+      }
+      mymap.fitBounds(bound,{
+        padding: 50,
+        maxZoom: 10
+      });
       $("#station").append(
         `<table class=\"ui celled table\">\
                  <thead>\
@@ -407,26 +422,35 @@ function fix_lon (val)
 	return val
 }
 $(document).ready(() => {
-  mymap = L.map('map').setView([35,115], 4);
-  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'songhongyi/clcskhikb000d15p3ou7xhgub',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1Ijoic29uZ2hvbmd5aSIsImEiOiJja25jdDdjZG4xM25iMnVvb2NjbDl3YjMwIn0.PJZgJQmBgR_g-vsSD7uKFA'
-    }).addTo(mymap);
+  // mymap = L.map('map').setView([35,115], 4);
+  // L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+  //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+  //   maxZoom: 18,
+  //   id: 'songhongyi/clcspak0b000615kevtw1s8ci',
+  //   tileSize: 512,
+  //   zoomOffset: -1,
+  //   accessToken: 'pk.eyJ1Ijoic29uZ2hvbmd5aSIsImEiOiJja25jdDdjZG4xM25iMnVvb2NjbDl3YjMwIn0.PJZgJQmBgR_g-vsSD7uKFA'
+  //   }).addTo(mymap);
   function onMapClick(e) {
-      if (confirm(`Do you want to see the climate of (${e.latlng.lat},${fix_lon(e.latlng.lng)})` ))
+    console.log( e.target)
+      if (confirm(`Do you want to see the climate of (${e.lngLat.lat},${fix_lon(e.lngLat.lng)})` ))
       {
-        loc.lat=e.latlng.lat;
-        loc.lon=fix_lon(e.latlng.lng);
+        loc.lat=e.lngLat.lat;
+        loc.lon=fix_lon(e.lngLat.lng);
         loadLocation();
       }
   }
+  mapboxgl.accessToken = 'pk.eyJ1Ijoic29uZ2hvbmd5aSIsImEiOiJja25jdDdjZG4xM25iMnVvb2NjbDl3YjMwIn0.PJZgJQmBgR_g-vsSD7uKFA'
+  mymap = new mapboxgl.Map ({
+    container: 'map',
+    style: 'mapbox://styles/songhongyi/clcspak0b000615kevtw1s8ci',
+    center: [115,35],
+    zoom: 4,
+    dragRotate: false
+  });
   if (getQueryVariable("station_id") == undefined)
     mymap.on('click', onMapClick);
-  mks=L.layerGroup();
+  mks=[];
   loadLocation();
   loadView();
 });
