@@ -426,7 +426,9 @@ $(document).ready(() => {
   //   accessToken: 'pk.eyJ1Ijoic29uZ2hvbmd5aSIsImEiOiJja25jdDdjZG4xM25iMnVvb2NjbDl3YjMwIn0.PJZgJQmBgR_g-vsSD7uKFA'
   //   }).addTo(mymap);
   function onMapClick(e) {
-    console.log(e.target)
+    if (!e.originalEvent.target.classList.contains("mapboxgl-canvas")){
+      return;
+    }
     if (confirm(`Do you want to see the climate of (${e.lngLat.lat},${fix_lon(e.lngLat.lng)})`)) {
       loc.lat = e.lngLat.lat;
       loc.lon = fix_lon(e.lngLat.lng);
