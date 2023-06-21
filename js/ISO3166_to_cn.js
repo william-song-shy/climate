@@ -128,7 +128,7 @@ var data={
     "LT":["立陶宛","Lithuania","LTU"],
     "LU":["卢森堡","Luxembourg","LUX"],
     "MO":["中国澳门","Macao","MAC"],
-    "MK":["前南马其顿","Macedonia (the former Yugoslav Republic of)","MKD"],
+    "MK":["北马其顿","Macedonia (the former Yugoslav Republic of)","MKD"],
     "MG":["马达加斯加","Madagascar","MDG"],
     "MW":["马拉维","Malawi","MWI"],
     "MY":["马来西亚","Malaysia","MYS"],
