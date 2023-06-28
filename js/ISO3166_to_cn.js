@@ -243,7 +243,8 @@ var data={
     "YE":["也门","Yemen","YEM"],
     "YU":["南斯拉夫","Yugoslavia","YUG"],
     "ZM":["赞比亚","Zambia","ZMB"],
-    "ZW":["津巴布韦","Zimbabwe","ZWE"]
+    "ZW":["津巴布韦","Zimbabwe","ZWE"],
+    "XK":["科索沃","Kosovo"]
     };
 
 function ISO3166_to_cn (val)
