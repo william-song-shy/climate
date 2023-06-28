@@ -110,6 +110,16 @@ async function loadLocation() {
         pres.push(x.prcp);
         temp.push(x.tavg);
       }
+      $("#data-raw").text(JSON.stringify({'prep':pres,'temp':temp}));
+      $("#copydata").css("display","");
+      clipboard = new ClipboardJS('#copydata', {
+        text: function () {
+          //console.log(loc)
+          $("#copydata").text("复制成功");
+          setTimeout(function () { $("#copydata").text("复制数据"); }, 1000);
+          return $("#data-raw").text();
+        }
+      });
       $("#chart").show();
       e_op = {
         tooltip: {
