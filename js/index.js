@@ -120,6 +120,25 @@ async function loadLocation() {
                     return $("#data-raw").text();
                 }
             });
+            $("#download").click(() => {
+                fetch('https://clichart.rotriw.com/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({'lat':parseFloat(loc.lat),'lon':parseFloat(loc.lon),'data':{'prep':pres,'temp':temp}}),
+                }).then(function(response) {
+                    return response.blob();
+                }).then(function(blob) {
+                    var url = URL.createObjectURL(blob);
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'chart.png';
+                    link.click();
+                    URL.revokeObjectURL(url);
+                    link.remove();
+                });
+            })
             $("#chart").show();
             e_op = {
                 tooltip: {
@@ -127,8 +146,6 @@ async function loadLocation() {
                 },
                 toolbox: {
                     feature: {
-                        restore: { show: true },
-                        saveAsImage: { show: true }
                     }
                 },
                 legend: {
