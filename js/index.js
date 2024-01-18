@@ -77,6 +77,14 @@ async function loadLocation() {
                 )}&lon=${parseFloat(loc.lon)}`
                 : `https://climate.rotriw.com/station/climate?id=${station_id}`,
         success: (result) => {
+            if (result.error){
+                $.toast({
+                    class: "error",
+                    message: result.error,
+                    showProgress: 'bottom'
+                });
+                return;
+            }
             $.toast({
                 class: "success",
                 message: "获取数据成功",
