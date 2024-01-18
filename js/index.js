@@ -407,7 +407,7 @@ async function loadView() {
         .search({
             minCharacters: 1,
             apiSettings: {
-                url: 'https://climate.rotriw.com/place/find?name={query}',
+                url: 'https://climate.rotriw.com/place/find?name={query}&limit=5',
                 onResponse: function (resp) {
                     console.log(resp, Object.values(resp));
                     var
